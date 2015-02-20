@@ -7,6 +7,9 @@ class Utente(models.Model):
 #	nome=models.CharField(max_length=50)
 #	cognome=models.CharField(max_length=50)
 	indirizzo=models.CharField(max_length=150)
+	citta=models.CharField(max_length=150,default=None)
+	provincia=models.CharField(max_length=150,default=None)
+	cap=models.CharField(max_length=6,default=None)
 	ref=models.ForeignKey(User,related_name="ref")
 
 
