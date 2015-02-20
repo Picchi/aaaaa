@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Utente(models.Model):
+class Indirizzo(models.Model):
 #	username=models.CharField(max_length=20)
 #	nome=models.CharField(max_length=50)
 #	cognome=models.CharField(max_length=50)
-	indirizzo=models.CharField(max_length=150)
+	via=models.CharField(max_length=150)
 	citta=models.CharField(max_length=150,default=None)
 	provincia=models.CharField(max_length=150,default=None)
 	cap=models.CharField(max_length=6,default=None)
@@ -29,8 +29,8 @@ class Oggetto(models.Model):
 	prezzo_attuale=models.FloatField()
 	prezzo_compra_subito=models.FloatField()
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
-	utente=models.ForeignKey(Utente,related_name="oggetti")
-	utente_vincente=models.ForeignKey(Utente,related_name="vincente")
+	utente=models.ForeignKey(User,related_name="oggetti")
+	utente_vincente=models.ForeignKey(User,related_name="vincente")
 
 
 
