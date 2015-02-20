@@ -4,7 +4,7 @@
 {% endcomment %}
 
 {% block head %}
-  <title>Django Mysite | Login</title>
+  <title>Aste</title>
 {% endblock %}
 
 {% block body %}
@@ -32,7 +32,10 @@
       {% else %}
         <input type="hidden" name="next" value="/" />
       {% endif %}
-      <input type="submit" value="login" />
-    </form>
+      <input type="submit" value="login" /> 
+    </form> 
+  <form action="/sign_up" method="get">
+      <input type="submit" value="Sign Up">
+  </form>
   </section>
 {% endblock %}

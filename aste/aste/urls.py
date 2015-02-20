@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', views.logout_page),
+    url(r'^sign_up/$',views.sign_up_page),
 	#url(r'^aste/',include('aste_core.urls',namespace='aste_core')),
 	url(r'',include('aste_core.urls',namespace='aste_core')),
 
