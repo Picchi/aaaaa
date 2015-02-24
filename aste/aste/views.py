@@ -1,7 +1,9 @@
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User,Permissions
 from django.shortcuts import render
 from django import forms
+from aste_core.models import Indirizzo as I
 
 class SignUpForm(forms.Form):
     Username=forms.CharField(label='Username', required=True )
@@ -10,8 +12,11 @@ class SignUpForm(forms.Form):
     Nome = forms.CharField(label='Nome', required=True)
     Cognome=forms.CharField(label='Cognome', required=True)
     Mail=forms.EmailField(label='Mail', required=True)
-    Citta=forms.CharField(label='Citta', required=True)
     Via=forms.CharField(label='Via', required=True)
+    Citta=forms.CharField(label='Citta', required=True)
+    Provincia=forms.CharField(label='Via', required=True)
+    Cap=forms.CharField(label='Via', required=True)
+
     #Img=forms.ImageField(label="im")
 
 
@@ -28,7 +33,22 @@ def sign_up_page(req):
 		#print(req.POST['Username'])
 		if f.is_valid() or req.POST['Password']!=req.POST['Password2']:
 			print(f.Username)
-			user = User.objects.create_user('john','lennon@thebeatles.com', 'johnpassword')
+			try:
+				user = User.objects.create_user(req.POST['Username'],req.POST['Mail'], req.POST['Password'])
+				user.first_name=req.POST['Nome']
+				user.last_name=req.POST['Cognome']
+				user.user_permissions.add(Permissions.objects.get(name='Can add Indirizzo'))
+				user.user_permissions.add(Permissions.objects.get(name='Can change Indirizzo')
+				user.user_permissions.add(Permissions.objects.get(name='Can delete Indirizzo'))
+				user.user_permissions.add(Permissions.objects.get(name='Can add Oggetto'))
+				user.user_permissions.add(Permissions.objects.get(name='Can change Oggetto'))
+				user.user_permissions.add(Permissions.objects.get(name='Can add Offerta'))
+				user.user_permissions.add(Permissions.objects.get(name='Can change Offerta'))
+
+				user.save()
+				II=I.objects.create(via=req.POST['Via'])
+			except  e:
+				return render(req,'reg/sign_up.html',{'form':SignUpForm(),'msg':e.__str__})
 			#print(f.)
 			return HttpResponseRedirect('.')
 		else:

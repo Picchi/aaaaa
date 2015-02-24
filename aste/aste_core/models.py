@@ -20,6 +20,11 @@ class Categoria(models.Model):
 
 		
 
+class Offerta(models.Model):
+	#ogetto=models.ForeignKey(Oggetto,related_name="attuale_vincitore")
+	utente=models.ForeignKey(User,related_name="offerte")
+	prezzo_massimo=models.FloatField()
+
 class Oggetto(models.Model):
 	nome=models.CharField(max_length=50)
 	data_pubblicazione=models.DateTimeField(auto_now_add=True)
@@ -31,10 +36,6 @@ class Oggetto(models.Model):
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
+	offerta_migliore=models.ForeignKey(Offerta)
 
 
-
-class Offerta(models.Model):
-	ogetto=models.ForeignKey(Oggetto,related_name="attuale_vincitore")
-	utente=models.ForeignKey(User,related_name="offerte")
-	prezzo_massimo=models.FloatField()
