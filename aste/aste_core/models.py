@@ -20,14 +20,12 @@ class Categoria(models.Model):
 
 		
 
-class Offerta(models.Model):
-	#ogetto=models.ForeignKey(Oggetto,related_name="attuale_vincitore")
-	utente=models.ForeignKey(User,related_name="offerte")
-	prezzo_massimo=models.FloatField()
 
 class Oggetto(models.Model):
 	nome=models.CharField(max_length=50)
 	data_pubblicazione=models.DateTimeField(auto_now_add=True)
+	STATO_OGGETTO=((1,'IN CORSO'),(2,'SCADUTA')) 
+	stato=models.IntegerField(choices=STATO_OGGETTO,default=1)
 	descrizione=models.TextField()
 	data_termine=models.DateTimeField('data di fine asta')
 	prezzo_partenza=models.FloatField()
@@ -36,6 +34,10 @@ class Oggetto(models.Model):
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
-	offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
+	#offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
 
+class Offerta(models.Model):
+	ogetto=models.ForeignKey(Oggetto,related_name="Utente")
+	utente=models.ForeignKey(User,related_name="offerte")
+	prezzo_massimo=models.FloatField()
 
