@@ -12,6 +12,11 @@
 	<form action="." method="post">
 	    {% csrf_token %}
 	    {{ form.as_p }}
+	{% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+    {% else %}
+        <input type="hidden" name="next" value="/" />
+    {% endif %}
 	    <input type="submit" value="Submit" />
 	</form>
   </section>

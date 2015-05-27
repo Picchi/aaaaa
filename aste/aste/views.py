@@ -1,6 +1,6 @@
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User,Permissions
+from django.contrib.auth.models import User,Permission
 from django.shortcuts import render
 from django import forms
 from aste_core.models import Indirizzo as I
@@ -14,8 +14,8 @@ class SignUpForm(forms.Form):
     Mail=forms.EmailField(label='Mail', required=True)
     Via=forms.CharField(label='Via', required=True)
     Citta=forms.CharField(label='Citta', required=True)
-    Provincia=forms.CharField(label='Via', required=True)
-    Cap=forms.CharField(label='Via', required=True)
+    Provincia=forms.CharField(label='Provincia', required=True)
+    Cap=forms.CharField(label='Cap', required=True)
 
     #Img=forms.ImageField(label="im")
 
@@ -32,22 +32,21 @@ def sign_up_page(req):
 		f=SignUpForm(req.POST)
 		#print(req.POST['Username'])
 		if f.is_valid() or req.POST['Password']!=req.POST['Password2']:
-			print(f.Username)
+			#print(f.Username)
 			try:
 				user = User.objects.create_user(req.POST['Username'],req.POST['Mail'], req.POST['Password'])
 				user.first_name=req.POST['Nome']
 				user.last_name=req.POST['Cognome']
-				user.user_permissions.add(Permissions.objects.get(name='Can add Indirizzo'))
-				user.user_permissions.add(Permissions.objects.get(name='Can change Indirizzo')
-				user.user_permissions.add(Permissions.objects.get(name='Can delete Indirizzo'))
-				user.user_permissions.add(Permissions.objects.get(name='Can add Oggetto'))
-				user.user_permissions.add(Permissions.objects.get(name='Can change Oggetto'))
-				user.user_permissions.add(Permissions.objects.get(name='Can add Offerta'))
-				user.user_permissions.add(Permissions.objects.get(name='Can change Offerta'))
-
+				user.user_permissions.add(Permission.objects.get(name='Can add indirizzo'))
+				user.user_permissions.add(Permission.objects.get(name='Can change indirizzo'))
+				user.user_permissions.add(Permission.objects.get(name='Can delete indirizzo'))
+				user.user_permissions.add(Permission.objects.get(name='Can add oggetto'))
+				user.user_permissions.add(Permission.objects.get(name='Can change oggetto'))
+				user.user_permissions.add(Permission.objects.get(name='Can add offerta'))
+				user.user_permissions.add(Permission.objects.get(name='Can change offerta'))
 				user.save()
 				II=I.objects.create(via=req.POST['Via'])
-			except  e:
+			except  Exception as e:
 				return render(req,'reg/sign_up.html',{'form':SignUpForm(),'msg':e.__str__})
 			#print(f.)
 			return HttpResponseRedirect('.')

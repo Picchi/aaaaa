@@ -36,6 +36,6 @@ class Oggetto(models.Model):
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
-	offerta_migliore=models.ForeignKey(Offerta)
+	offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
 
 
