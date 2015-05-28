@@ -29,37 +29,64 @@ class Oggetto(models.Model):
 	descrizione=models.TextField()
 	data_termine=models.DateTimeField('data di fine asta')
 	prezzo_partenza=models.FloatField()
-	prezzo_attuale=models.FloatField()
-	prezzo_compra_subito=models.FloatField()
+	prezzo_attuale=models.FloatField(default=0)
+	prezzo_compra_subito=models.FloatField(default=0)
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
 	foto=models.FileField(upload_to="foto");
-	RILANCIO_MINIMO=0.05
-	def add_offerta(self,new_off):.
+
+	def add_offerta(self,new_off):
+		if new_off.utente.id==self.utente_vincente.id:
+			return (0,"Miglior offerte")
 		if new_off.prezzo_massimo <= self.prezzo_attuale :
 			#raise OffertaExcpetion("Offerta Troppo bassa")
 			return (-1,"Offerta troppo bassa")
-		of=Offerta.objects.get(oggetto=self.id,utente=self.utente_vincente)
+		if self.prezzo_attuale == 0  :
+			self.prezzo_attuale=self.prezzo_partenza
+			self.utente_vincente=new_off.utente
+			return (0,"Miglior offerte")
+		of=Offerta.objects.get(oggetto=self.id,utente=self.utente_vincente.id)
+		#print("kk "+new_off.prezzo_massimo.__str__()+" "+self.prezzo_attuale.__str__())
 		if of.prezzo_massimo >= new_off.prezzo_massimo :
-			self.prezzo_attuale=of.prezzo_massimo-((of.prezzo_massimo-new_off.prezzo_massimo-RILANCIO_MINIMO) if of.prezzo_massimo!=new_off.prezzo_massimo else 0 )
+			self.prezzo_attuale=of.prezzo_massimo-((of.prezzo_massimo-new_off.prezzo_massimo-0.05) if of.prezzo_massimo!=new_off.prezzo_massimo else 0 )
 			self.save()
 			return (1,"Offerta superata")
-		self.prezzo_attuale=new_off.prezzo_massimo-(new_off.prezzo_massimo-of.prezzo_massimo-RILANCIO_MINIMO)
-		self.utente_vincente=of.utente
+		self.prezzo_attuale=new_off.prezzo_massimo-(new_off.prezzo_massimo-of.prezzo_massimo-0.05)
+		self.utente_vincente=new_off.utente
 		self.save()
 		return (0,"Miglior offerte")
 	
 
 	#offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
 
+
+
 class Offerta(models.Model):
-	ogetto=models.ForeignKey(Oggetto,related_name="offerte")
+	oggetto=models.ForeignKey(Oggetto,related_name="offerte")
 	utente=models.ForeignKey(User,related_name="offerta")
 	data=models.DateTimeField(auto_now_add=True)
 	prezzo_massimo=models.FloatField()
+
+	@classmethod
+	def CreateOfferta(cls,oggetto=None,utente=None,prezzo_massimo=None,data=None):
+		try:
+			o=Offerta.objects.get(oggetto=oggetto,utente=utente)
+			#if o.prezzo_massimo > prezzo_massimo :
+			#	return
+			#o.delete()
+			#raise Exception
+			o.prezzo_massimo=prezzo_massimo
+			o.save()
+			#print("id "+o.pk.__str__())
+			#print(o.save())
+			#print("afet save " +oggetto.prezzo_attuale.__str__()+" "+o.oggetto.prezzo_attuale.__str__())
+			#print("kkkk "+o.oggetto.nome.__str__()+" "+o.oggetto.pk.__str__()+" "+o.oggetto.prezzo_attuale.__str__())
+			return o
+		except Exception as e:
+			return Offerta.objects.create(oggetto=oggetto,utente=utente,prezzo_massimo=prezzo_massimo,data=data)
 	def save(self, *args, **kwargs):
-		ret=self.oggetto.add_offerta(self)
 		super(Offerta, self).save(*args, **kwargs)
+		ret=self.oggetto.add_offerta(self)
 		return ret
 
