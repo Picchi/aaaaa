@@ -34,7 +34,6 @@ class Oggetto(models.Model):
 	categoria=models.ForeignKey(Categoria,related_name="oggetti")
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
-	foto=models.FileField(upload_to="foto");
 	#offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
 
 class Offerta(models.Model):
