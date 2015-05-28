@@ -15,7 +15,7 @@ class Migration(SchemaMigration):
             ('citta', self.gf('django.db.models.fields.CharField')(default=None, max_length=150)),
             ('provincia', self.gf('django.db.models.fields.CharField')(default=None, max_length=150)),
             ('cap', self.gf('django.db.models.fields.CharField')(default=None, max_length=6)),
-            ('ref', self.gf('django.db.models.fields.related.ForeignKey')(related_name='ref', to=orm['auth.User'])),
+            ('ref', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], related_name='ref')),
         ))
         db.send_create_signal('aste_core', ['Indirizzo'])
 
@@ -30,24 +30,25 @@ class Migration(SchemaMigration):
         db.create_table('aste_core_oggetto', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('nome', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('data_pubblicazione', self.gf('django.db.models.fields.DateTimeField')(blank=True, auto_now_add=True)),
+            ('data_pubblicazione', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('stato', self.gf('django.db.models.fields.IntegerField')(default=1)),
             ('descrizione', self.gf('django.db.models.fields.TextField')()),
             ('data_termine', self.gf('django.db.models.fields.DateTimeField')()),
             ('prezzo_partenza', self.gf('django.db.models.fields.FloatField')()),
             ('prezzo_attuale', self.gf('django.db.models.fields.FloatField')()),
             ('prezzo_compra_subito', self.gf('django.db.models.fields.FloatField')()),
-            ('categoria', self.gf('django.db.models.fields.related.ForeignKey')(related_name='oggetti', to=orm['aste_core.Categoria'])),
-            ('utente', self.gf('django.db.models.fields.related.ForeignKey')(related_name='oggetti', to=orm['auth.User'])),
-            ('utente_vincente', self.gf('django.db.models.fields.related.ForeignKey')(related_name='vincente', to=orm['auth.User'])),
+            ('categoria', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aste_core.Categoria'], related_name='oggetti')),
+            ('utente', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], related_name='oggetti')),
+            ('utente_vincente', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], related_name='vincente')),
+            ('foto', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
         db.send_create_signal('aste_core', ['Oggetto'])
 
         # Adding model 'Offerta'
         db.create_table('aste_core_offerta', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('ogetto', self.gf('django.db.models.fields.related.ForeignKey')(related_name='Utente', to=orm['aste_core.Oggetto'])),
-            ('utente', self.gf('django.db.models.fields.related.ForeignKey')(related_name='offerte', to=orm['auth.User'])),
+            ('ogetto', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aste_core.Oggetto'], related_name='Utente')),
+            ('utente', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], related_name='offerte')),
             ('prezzo_massimo', self.gf('django.db.models.fields.FloatField')()),
         ))
         db.send_create_signal('aste_core', ['Offerta'])
@@ -79,36 +80,37 @@ class Migration(SchemaMigration):
             'citta': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '150'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'provincia': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '150'}),
-            'ref': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'ref'", 'to': "orm['auth.User']"}),
+            'ref': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'related_name': "'ref'"}),
             'via': ('django.db.models.fields.CharField', [], {'max_length': '150'})
         },
         'aste_core.offerta': {
             'Meta': {'object_name': 'Offerta'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ogetto': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'Utente'", 'to': "orm['aste_core.Oggetto']"}),
+            'ogetto': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['aste_core.Oggetto']", 'related_name': "'Utente'"}),
             'prezzo_massimo': ('django.db.models.fields.FloatField', [], {}),
-            'utente': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'offerte'", 'to': "orm['auth.User']"})
+            'utente': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'related_name': "'offerte'"})
         },
         'aste_core.oggetto': {
             'Meta': {'object_name': 'Oggetto'},
-            'categoria': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'oggetti'", 'to': "orm['aste_core.Categoria']"}),
-            'data_pubblicazione': ('django.db.models.fields.DateTimeField', [], {'blank': 'True', 'auto_now_add': 'True'}),
+            'categoria': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['aste_core.Categoria']", 'related_name': "'oggetti'"}),
+            'data_pubblicazione': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'data_termine': ('django.db.models.fields.DateTimeField', [], {}),
             'descrizione': ('django.db.models.fields.TextField', [], {}),
+            'foto': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'nome': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'prezzo_attuale': ('django.db.models.fields.FloatField', [], {}),
             'prezzo_compra_subito': ('django.db.models.fields.FloatField', [], {}),
             'prezzo_partenza': ('django.db.models.fields.FloatField', [], {}),
             'stato': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'utente': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'oggetti'", 'to': "orm['auth.User']"}),
-            'utente_vincente': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'vincente'", 'to': "orm['auth.User']"})
+            'utente': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'related_name': "'oggetti'"}),
+            'utente_vincente': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'related_name': "'vincente'"})
         },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'symmetrical': 'False', 'to': "orm['auth.Permission']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True'}),
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.Permission']", 'blank': 'True'})
         },
         'auth.permission': {
             'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'object_name': 'Permission', 'unique_together': "(('content_type', 'codename'),)"},
@@ -122,7 +124,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'blank': 'True', 'max_length': '75'}),
             'first_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'symmetrical': 'False', 'to': "orm['auth.Group']"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.Group']", 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -130,8 +132,8 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'symmetrical': 'False', 'to': "orm['auth.Permission']"}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.Permission']", 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '30', 'unique': 'True'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'db_table': "'django_content_type'", 'object_name': 'ContentType', 'unique_together': "(('app_label', 'model'),)"},
