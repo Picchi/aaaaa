@@ -35,12 +35,31 @@ class Oggetto(models.Model):
 	utente=models.ForeignKey(User,related_name="oggetti")
 	utente_vincente=models.ForeignKey(User,related_name="vincente")
 	foto=models.FileField(upload_to="foto");
-	def miglior_prezzo(self):
-		of=Offerta.objects.get(oggetto=self.id)
+	RILANCIO_MINIMO=0.05
+	def add_offerta(self,new_off):.
+		if new_off.prezzo_massimo <= self.prezzo_attuale :
+			#raise OffertaExcpetion("Offerta Troppo bassa")
+			return (-1,"Offerta troppo bassa")
+		of=Offerta.objects.get(oggetto=self.id,utente=self.utente_vincente)
+		if of.prezzo_massimo >= new_off.prezzo_massimo :
+			self.prezzo_attuale=of.prezzo_massimo-((of.prezzo_massimo-new_off.prezzo_massimo-RILANCIO_MINIMO) if of.prezzo_massimo!=new_off.prezzo_massimo else 0 )
+			self.save()
+			return (1,"Offerta superata")
+		self.prezzo_attuale=new_off.prezzo_massimo-(new_off.prezzo_massimo-of.prezzo_massimo-RILANCIO_MINIMO)
+		self.utente_vincente=of.utente
+		self.save()
+		return (0,"Miglior offerte")
+	
+
 	#offerta_migliore=models.ForeignKey(Offerta,related_name='Oggetto')
 
 class Offerta(models.Model):
-	ogetto=models.ForeignKey(Oggetto,related_name="Utente")
-	utente=models.ForeignKey(User,related_name="offerte")
+	ogetto=models.ForeignKey(Oggetto,related_name="offerte")
+	utente=models.ForeignKey(User,related_name="offerta")
+	data=models.DateTimeField(auto_now_add=True)
 	prezzo_massimo=models.FloatField()
+	def save(self, *args, **kwargs):
+		ret=self.oggetto.add_offerta(self)
+		super(Offerta, self).save(*args, **kwargs)
+		return ret
 
