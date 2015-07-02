@@ -9,7 +9,7 @@
     {% if msg %}
       {{ msg }}
     {% endif %}
-	<form action="." method="post">
+	<form action="." enctype="multipart/form-data" method="post">
 	    {% csrf_token %}
 	    {{ form.as_p }}
 	{% if next %}

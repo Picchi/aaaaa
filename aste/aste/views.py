@@ -51,7 +51,7 @@ def sign_up_page(req):
 			#print(f.)
 			return HttpResponseRedirect(req.POST['next'])
 		else:
-			return HttpResponseRedirect(req.POST['next'])
-			return render(req,'reg/sign_up.html',{'form':SignUpForm(),'msg':"Dati Insereti non validi"})
+			#return HttpResponseRedirect(req.POST['next'])
+			return render(req,'reg/sign_up.html',{'form':SignUpForm(),'msg':"Dati Insereti non validi",'next':req.POST['next']})
 	else:
 		return render(req,'reg/sign_up.html',{'form':SignUpForm(),'next':req.GET['next']})
