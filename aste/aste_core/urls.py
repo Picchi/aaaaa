@@ -6,8 +6,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^$',views.index),
+	url(r'^ll/$',views.ll,name='ll'),
 	url(r'(?P<str>.*)/',views.kk,name='kk'),
-    
-	
-
-)
+ )
