@@ -9,9 +9,10 @@ lkkkkk
 <br>
 <table>
 {% for a in o %}
-<tr><td>
-{{ a.nome }} </td><td> {{ a.prezzo_partenza }} </td><td> {{ a.foto }} </td><td>
-<img src="/media/{{ a.foto }}"  height="180" width="180"></td></tr>
+<tr>
+	<td>
+<img src="/media/{{ a.foto }}"  height="180" width="180"></td><td>
+{{ a.nome }} </td><td> {{ a.prezzo_partenza }} </td><td> {{ a.foto }} </td></tr>
 {% endfor %}
 </table>
 <br>

@@ -25,6 +25,7 @@ def logout_page(request):
     print("LogOut ")
     return HttpResponseRedirect('/')
 
+
 def sign_up_page(req):
 	if req.user.is_authenticated():
 		return HttpResponseRedirect('/')

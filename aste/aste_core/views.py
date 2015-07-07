@@ -5,6 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 import datetime
 import random
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -49,9 +50,9 @@ def sell_object(req):
 				t=timezone.now()
 				if p_c is not 0 and float(req.POST['PrezzoPartenza']) > p_c:
 					raise Exception("Prezzo compralo subito minore prezzo partenza")
-				obj = Oggetto.objects.create(nome=req.POST['Nome'],prezzo_partenza=float(req.POST['PrezzoPartenza']),prezzo_attuale=0,
-					prezzo_compra_subito=p_c,data_termine=t+datetime.timedelta(days=int(req.POST['Durata']),seconds=-t.second,microseconds=-t.microsecond),
-					categoria=Categoria.objects.get(nome=req.POST['cat']),utente=req.user,utente_vincente=req.user,feedback=fe,foto=f.cleaned_data['img'])
+				obj = Oggetto.objects.create(nome=f.cleaned_data['Nome'],prezzo_partenza=f.cleaned_data['PrezzoPartenza'],prezzo_attuale=0,
+					prezzo_compra_subito=p_c,data_termine=t+datetime.timedelta(days=f.cleaned_data['Durata'],seconds=-t.second,microseconds=-t.microsecond),
+					categoria=Categoria.objects.get(nome=f.cleaned_data['cat']),utente=req.user,utente_vincente=req.user,feedback=fe,foto=f.cleaned_data['img'])
 				fe.save()
 				obj.save()
 				print('ok')
@@ -71,15 +72,18 @@ def sell_object(req):
 		except Exception as e:
 			return render(req,'aste_core/sell_object.html',{'form':AddObject(),'next':'/'})
 
+def show_item(req,pk):
+	o = get_object_or_404(Oggetto, pk=int(pk))
+	return render('aste_core/show_item',{'o':0})
 
 def search(req):
 	try:
 		s=req.GET['s']
-	except Exception, e:
+	except Exception as e:
 		s=''
 	o=Oggetto.objects.none()
 	for i in req.GET['s'].split(' '):
-		o = o | Oggetto.objects.all().filter(nome__contains=i)
+		o = o | Oggetto.objects.filter(nome__contains=i)
 	return render(req,'aste_core/index.html',{'o':o})
 
 @login_required
