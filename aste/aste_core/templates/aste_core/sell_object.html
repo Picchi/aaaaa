@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <title>Vendi un oggetto</title>
+{% endblock %}
+
+{% block body %}
+  <section>
+    {% if msg %}
+      {{ msg }}
+    {% endif %}
+	<form action="." enctype="multipart/form-data" method="post">
+	    {% csrf_token %}
+	    {{ form.as_p }}
+	{% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+    {% else %}
+        <input type="hidden" name="next" value="/" />
+    {% endif %}
+	    <input type="submit" value="Submit" />
+	</form>
+  </section>
+{% endblock %}
