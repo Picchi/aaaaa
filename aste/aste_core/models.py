@@ -67,7 +67,7 @@ class Oggetto(models.Model):
 		if self.stato != 1:
 			raise Exception(3)
 		if new_off.utente.id==self.utente_vincente.id:
-			return (0,"Miglior offerente")
+			return (0,"Offerta aggiornata")
 		if new_off.prezzo_massimo <= self.prezzo_attuale :
 			raise Exception(2)
 		if self.prezzo_attuale == 0  :
@@ -105,6 +105,8 @@ class Offerta(models.Model):
 			#	return
 			#o.delete()
 			#raise Exception
+			if o.prezzo_massimo > prezzo_massimo :
+				return (0,'Non puoi offrire meno della tua precedente')
 			o.prezzo_massimo=prezzo_massimo
 			m=o.save()
 			#print("id "+o.pk.__str__())
@@ -113,7 +115,10 @@ class Offerta(models.Model):
 			#print("kkkk "+o.oggetto.nome.__str__()+" "+o.oggetto.pk.__str__()+" "+o.oggetto.prezzo_attuale.__str__())
 			return m
 		except Exception as e:
-			o=Offerta.objects.create(oggetto=oggetto,utente=utente,prezzo_massimo=prezzo_massimo,data=data)
+			try:
+				o=Offerta.objects.create(oggetto=oggetto,utente=utente,prezzo_massimo=prezzo_massimo,data=data)
+			except Exception as ee:
+				return (1,"Valore inserito non corretto")
 			#print('l')
 			#print(o.save())
 			return o.save()

@@ -53,7 +53,7 @@ def bid(req):
 	mess=''
 	try:
 		off = Offerta.CreateOfferta(oggetto=o,utente=req.user,prezzo_massimo=float(req.GET['offerta']))
-		mess=off[1]
+		mess="/"+off[1]
 	except Exception as e:
 		if e.args[0] == 1 :
 			mess='/Non puoi offrire per i tuoi oggetti'
@@ -61,6 +61,8 @@ def bid(req):
 			mess='/Asta Chiusa'
 		if e.args[0] ==  2 :
 			mess='/Offerta troppo bassa'
+		if mess == '':
+			mess="/"+e.__str__()
 
 	return HttpResponseRedirect('/item/'+req.GET['pk']+mess)
 
@@ -73,15 +75,18 @@ def account(req):
 @login_required
 def offerte(req):
 	off=Offerta.objects.filter(utente=req.user)
+	all_ob_off=()
 	o=[]
 	oo=[]
 	for i in off:
 		if not i.oggetto.is_past_due :
 			o.append(i.oggetto)
+			all_ob_off += ((i.oggetto,i),)
+	print(all_ob_off)
 	for i in off:
 		if i.oggetto.is_past_due :
 			oo.append(i.oggetto)
-	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo':2,'stato':STATO_OGGETTO})
+	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo':2,'all_ob':all_ob_off})
 
 @login_required
 def sell_object(req):
@@ -141,7 +146,7 @@ def search(req):
 
 @login_required
 def kk(req,str):
-	print(dir(req))
+	#print(dir(req))
 	print(req.user)
 	print(req.user)
 	print('dsa')

@@ -23,14 +23,12 @@ Salve {{ user }} <br>
   {% endif %}
 <br>In corso<br>
 <table style="width:100%">
-{% for a in o %}
-{% with s=stato.a.stato %}
-{{ s }}
-{% endwith %}
+{% for a in all_ob %}
 <tr>
 	<td>
-<a href="item/{{ a.pk }}"><img src="/media/{{ a.foto }}"  style="height:250px;max-width:250px;width: expression(this.width > 250 ? 250: true);"></a></td><td>
-{{ a.nome }} </td><td>{% if a.prezzo_attuale == 0 %} {{ a.prezzo_partenza }} {% else %} {{ a.prezzo_attuale }} {% endif %}  </td><td> {{ a.data_termine }} </td><td>{{ a.stato }}</td></tr>
+<a href="item/{{ a.0.pk }}"><img src="/media/{{ a.0.foto }}"  style="height:250px;max-width:250px;width: expression(this.width > 250 ? 250: true);"></a></td><td>
+{{ a.0.nome }} </td><td>{% if a.0.prezzo_attuale == 0 %} {{ a.0.prezzo_partenza }} {% else %} {{ a.0.prezzo_attuale }} {% endif %}  </td>
+{% if tipo == 2 %} <td>{{a.1.prezzo_massimo}}</td>{% endif %}<td> {{ a.0.data_termine }} </td></tr>
 {% endfor %}
 </table>
 <br>

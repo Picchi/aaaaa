@@ -6,6 +6,9 @@
     {% block head %}{% endblock %}
   </head>
   <body>
+    {% if user.is_authenticated %}
+      Salve {{ user }}<br>
+   {% endif %}
   	<a href=/> Home</a>
   	{% if user.is_authenticated %}
   		<a href="/account">Il mio account</a>   <a href="/logout">Logout</a>
