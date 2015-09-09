@@ -1,23 +1,27 @@
-{% extends "base.html" %}
 
-{% block head %}
-  <title>Sign_ Up</title>
-{% endblock %}
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Sign_ Up</title>
+  </head>
+  <body>
 {% block body %}
   <section>
     {% if msg %}
       {{ msg }}
     {% endif %}
-	<form action="." enctype="multipart/form-data" method="post">
-	    {% csrf_token %}
-	    {{ form.as_p }}
-	{% if next %}
+  <form action="." enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+  {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
     {% else %}
         <input type="hidden" name="next" value="/" />
     {% endif %}
-	    <input type="submit" value="Submit" />
-	</form>
+      <input type="submit" value="Submit" />
+  </form>
   </section>
 {% endblock %}
+  </body>
+</html>

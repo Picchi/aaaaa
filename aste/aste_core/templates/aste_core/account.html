@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Account {{ user }}</title>
+  </head>
+  <body>
+{% block body %}
+Salve {{ user }} <br>
+<a href="/sell_object">Vendi oggetto</a>       <a href="/logout">Logout</a>
+{% if tipo == 1 %}
+<a href="/offerte">Le tue offerte</a>
+  {% else %} 
+ <a href="/account">I tuoi oggetti</a>
+ {% endif %}
+
+<br>
+{% if tipo == 1 %}
+ I tuoi oggetti in vendita
+  {% else %} 
+  Le tue offerte 
+  {% endif %}
+<br>In corso<br>
+<table style="width:100%">
+{% for a in o %}
+{% with s=stato.a.stato %}
+{{ s }}
+{% endwith %}
+<tr>
+	<td>
+<a href="item/{{ a.pk }}"><img src="/media/{{ a.foto }}"  style="height:250px;max-width:250px;width: expression(this.width > 250 ? 250: true);"></a></td><td>
+{{ a.nome }} </td><td>{% if a.prezzo_attuale == 0 %} {{ a.prezzo_partenza }} {% else %} {{ a.prezzo_attuale }} {% endif %}  </td><td> {{ a.data_termine }} </td><td>{{ a.stato }}</td></tr>
+{% endfor %}
+</table>
+<br>
+Concluse <br>
+<table style="width:100%">
+{% for a in oo %}
+<tr>
+	<td>
+<a href="item/{{ a.pk }}"><img src="/media/{{ a.foto }}"  style="height:250px;max-width:250px;width: expression(this.width > 250 ? 250: true);"></a></td><td>
+{{ a.nome }} </td><td>{% if a.prezzo_attuale == 0 %} {{ a.prezzo_partenza }} {% else %} {{ a.prezzo_attuale }} {% endif %}  </td><td> {{ a.data_termine }} </td></tr>
+{% endfor %}
+</table>
+{% endblock %}
+  </body>
+</html>

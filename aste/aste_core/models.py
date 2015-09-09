@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 # Create your models here.
 
 class Indirizzo(models.Model):
@@ -41,6 +44,12 @@ class Oggetto(models.Model):
 	foto=models.FileField(upload_to="foto");
 	feedback=models.ForeignKey(Feedback,related_name="ogg_feed")
 
+	@property
+	def is_past_due(self):
+		if timezone.now() > self.data_termine:
+			return True
+		return False
+
 	def compra_subito(self,utente):
 		if self.prezzo_compra_subito == 0 :
 			raise Exception(1)
@@ -48,6 +57,7 @@ class Oggetto(models.Model):
 			raise Exception(1)
 		self.stato=3
 		self.utente_vincente=utente
+		self.prezzo_attuale=self.prezzo_compra_subito
 		self.save()
 
 
@@ -57,7 +67,7 @@ class Oggetto(models.Model):
 		if self.stato != 1:
 			raise Exception(3)
 		if new_off.utente.id==self.utente_vincente.id:
-			return (0,"Miglior offerte")
+			return (0,"Miglior offerente")
 		if new_off.prezzo_massimo <= self.prezzo_attuale :
 			raise Exception(2)
 		if self.prezzo_attuale == 0  :
@@ -96,16 +106,20 @@ class Offerta(models.Model):
 			#o.delete()
 			#raise Exception
 			o.prezzo_massimo=prezzo_massimo
-			o.save()
+			m=o.save()
 			#print("id "+o.pk.__str__())
 			#print(o.save())
 			#print("afet save " +oggetto.prezzo_attuale.__str__()+" "+o.oggetto.prezzo_attuale.__str__())
 			#print("kkkk "+o.oggetto.nome.__str__()+" "+o.oggetto.pk.__str__()+" "+o.oggetto.prezzo_attuale.__str__())
-			return o
+			return m
 		except Exception as e:
-			return Offerta.objects.create(oggetto=oggetto,utente=utente,prezzo_massimo=prezzo_massimo,data=data)
+			o=Offerta.objects.create(oggetto=oggetto,utente=utente,prezzo_massimo=prezzo_massimo,data=data)
+			#print('l')
+			#print(o.save())
+			return o.save()
 	def save(self, *args, **kwargs):
 		ret=self.oggetto.add_offerta(self)
 		super(Offerta, self).save(*args, **kwargs)
+		print(ret)
 		return ret
 

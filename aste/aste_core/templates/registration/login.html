@@ -1,13 +1,10 @@
-{% extends "base.html" %}
-{% comment %}
-  Main page to authenticate users.
-{% endcomment %}
-
-{% block head %}
-  <title>Aste</title>
-{% endblock %}
-
-{% block body %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    {% block head %}<title>Aste</title>{% endblock %}
+  </head>
+  <body>
   <header>
     <h1>Aste</h1>
   </header>
@@ -43,4 +40,5 @@
       <input type="submit" value="Sign Up">
   </form>
   </section>
-{% endblock %}
+  </body>
+</html>

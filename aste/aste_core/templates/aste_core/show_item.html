@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <title>Item </title>
+{% endblock %}
+
+{% block body %}
+
+<br>
+<table>
+<tr>
+	<td>
+<img src="/media/{{ o.foto }}"  height="280" width="280"></td>
+<td>
+<table>
+	<tr><td>{{ o.nome }}</td></tr>
+	<tr><td>{% if  o.stato == 1 %}Prezzo Attuale:{% else %} Prezzo Finale: {% endif %} {% if o.prezzo_attuale == 0 %} {{ o.prezzo_partenza }} {% else %} {{ o.prezzo_attuale }} {% endif %} </td></tr>
+	<tr><td>{% if  o.stato == 1 %}<form method="get" action="/bid"><label for="offerta">Offerta:</label><input type="text" name="offerta"><br>
+		<input type="hidden" name="pk" value={{ o.pk }} />
+	  <input type="submit" value="Offri" /></form>
+	  {% if not o.prezzo_compra_subito == 0 %}
+	  </td>/<tr><tr><td><form method="get" action="/compra_subito"><label for="compra_subito">Compra subito:</label><label for="compra_subito">{{ o.prezzo_compra_subito}}</label><br>
+		<input type="hidden" name="pk" value={{ o.pk }} />
+	  <input type="submit" value="Comrpa subito" /></form> {% endif %} {{ mess }} {% else %} Asta Chiusa {% endif %}</td></tr>
+</table>
+<tr><td> {{ o.descrizione }} </td></tr>
+</table>
+<br>
+{% endblock %}

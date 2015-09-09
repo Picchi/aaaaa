@@ -26,6 +26,7 @@ def logout_page(request):
     return HttpResponseRedirect('/')
 
 
+
 def sign_up_page(req):
 	if req.user.is_authenticated():
 		return HttpResponseRedirect('/')
@@ -46,7 +47,8 @@ def sign_up_page(req):
 				user.user_permissions.add(Permission.objects.get(name='Can add offerta'))
 				user.user_permissions.add(Permission.objects.get(name='Can change offerta'))
 				user.save()
-				II=I.objects.create(via=req.POST['Via'])
+				II=I.objects.create(via=req.POST['Via'],citta=req.POST['Citta'],provincia=req.POST['Provincia'],cap=req.POST['Cap'],ref=user)
+				II.save()
 			except  Exception as e:
 				return render(req,'reg/sign_up.html',{'form':SignUpForm(),'msg':e.__str__})
 			#print(f.)
