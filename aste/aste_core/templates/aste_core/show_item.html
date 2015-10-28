@@ -19,7 +19,7 @@
 		<input type="hidden" name="pk" value={{ o.pk }} />
 	  <input type="submit" value="Offri" /></form>
 	  {% if not o.prezzo_compra_subito == 0 %}
-	  </td>/<tr><tr><td><form method="get" action="/compra_subito"><label for="compra_subito">Compra subito:</label><label for="compra_subito">{{ o.prezzo_compra_subito}}</label><br>
+	  </td>/<tr><tr><td><form method="get" action="compra_subito"><label for="compra_subito">Compra subito:</label><label for="compra_subito">{{ o.prezzo_compra_subito}}</label><br>
 		<input type="hidden" name="pk" value={{ o.pk }} />
 	  <input type="submit" value="Comrpa subito" /></form> {% endif %} {{ mess }} {% else %} Asta Chiusa {% endif %}</td></tr>
 </table>

@@ -21,7 +21,10 @@ Salve {{ user }} <br>
   {% else %} 
   Le tue offerte 
   {% endif %}
-<br>In corso<br>
+<br>
+{% if t == '' %}In corso    <a href='?t=con'>Concluse </a><a href='?t=sped'>Spedite</a> 
+{% else %}{% if t == 'con' %}<a href='?'>In corso </a>    Concluse   <a href='?t=sped'>Spedite</a>
+{% else %}<a href='?'>In corso </a> <a href='?t=con'>Concluse </a>  Spedite {% endif %} {% endif %}
 <table style="width:100%">
 {% for a in all_ob %}
 <tr>
@@ -31,8 +34,8 @@ Salve {{ user }} <br>
 {% if tipo == 2 %} <td>{{a.1.prezzo_massimo}}</td>{% endif %}<td> {{ a.0.data_termine }} </td></tr>
 {% endfor %}
 </table>
-<br>
-Concluse <br>
+{% comment %}
+<br>Concluse <br>
 <table style="width:100%">
 {% for a in oo %}
 <tr>
@@ -41,6 +44,7 @@ Concluse <br>
 {{ a.nome }} </td><td>{% if a.prezzo_attuale == 0 %} {{ a.prezzo_partenza }} {% else %} {{ a.prezzo_attuale }} {% endif %}  </td><td> {{ a.data_termine }} </td></tr>
 {% endfor %}
 </table>
+{% endcomment %}
 {% endblock %}
   </body>
 </html>

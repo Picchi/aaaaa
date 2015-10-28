@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', views.logout_page),
     url(r'^sign_up/$', views.sign_up_page),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^message/$',include('message.urls',namespace='message')),
 	#url(r'^aste/',include('aste_core.urls',namespace='aste_core')),
 	url(r'',include('aste_core.urls',namespace='aste_core')),
 

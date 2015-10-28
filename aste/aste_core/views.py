@@ -68,25 +68,47 @@ def bid(req):
 
 @login_required
 def account(req):
-	o=Oggetto.objects.filter(utente=req.user,data_termine__gt=datetime.datetime.now())
-	oo=Oggetto.objects.filter(utente=req.user,data_termine__lt=datetime.datetime.now())
-	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo': 1,'stato':STATO_OGGETTO})
+	try:
+		t=req.GET['t']
+	except Exception as e:
+		t=''
+	try:
+		p=req.GET['p']
+	except Exception as e:
+		p=1
+	o=()
+	if t == '':
+		oo=Oggetto.objects.filter(utente=req.user,data_termine__gt=timezone.now())[((p-1)*5):(p*5)]
+	else:
+		if  t=='con':
+			oo=Oggetto.objects.filter(utente=req.user,data_termine__lt=timezone.now(),stato__lt=5)[((p-1)*5):(p*5)]
+		else :
+			oo=Oggetto.objects.filter(utente=req.user,data_termine__lt=timezone.now(),stato=5)[((p-1)*5):(p*5)]
+	for i in oo:
+		o += ((i,i),)
+		#print(o)
+	oo=()
+	print(o)
+	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo': 1,'stato':STATO_OGGETTO,'t':t,'p':p,'all_ob':o})
 
 @login_required
 def offerte(req):
 	off=Offerta.objects.filter(utente=req.user)
+	try:
+		t=req.GET['t']
+	except Exception as e:
+		t=''
 	all_ob_off=()
 	o=[]
 	oo=[]
-	for i in off:
-		if not i.oggetto.is_past_due :
-			o.append(i.oggetto)
-			all_ob_off += ((i.oggetto,i),)
-	print(all_ob_off)
-	for i in off:
-		if i.oggetto.is_past_due :
-			oo.append(i.oggetto)
-	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo':2,'all_ob':all_ob_off})
+	if t == '' :
+		for i in off:
+			if not i.oggetto.is_past_due :
+				o.append(i.oggetto)
+				all_ob_off += ((i.oggetto,i),)
+			else:
+				oo.append(i.oggetto)
+	return render(req,'aste_core/account.html',{'o':o,'oo':oo,'tipo':2,'all_ob':all_ob_off,'t':t})
 
 @login_required
 def sell_object(req):
