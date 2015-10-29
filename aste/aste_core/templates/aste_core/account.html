@@ -1,20 +1,9 @@
+{% extends "base_account.html" %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <title>Account {{ user }}</title>
-  </head>
-  <body>
+
+ {% block head %}{% endblock %}
+ 
 {% block body %}
-Salve {{ user }} <br>
-<a href="/sell_object">Vendi oggetto</a>       <a href="/logout">Logout</a>
-{% if tipo == 1 %}
-<a href="/offerte">Le tue offerte</a>
-  {% else %} 
- <a href="/account">I tuoi oggetti</a>
- {% endif %}
-
 <br>
 {% if tipo == 1 %}
  I tuoi oggetti in vendita
@@ -46,5 +35,3 @@ Salve {{ user }} <br>
 </table>
 {% endcomment %}
 {% endblock %}
-  </body>
-</html>

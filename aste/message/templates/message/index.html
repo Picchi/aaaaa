@@ -1,0 +1,22 @@
+{% extends "base_account.html" %}
+
+{% block head %}
+  <title>Main Page</title>
+{% endblock %}
+
+{% block body %}
+ <form action="/search" method="get">
+ 	<label for="src">Search</label><input type="text" name="s">
+ <input type="submit" value="Submit" />
+ </form>
+<br>
+<table style="width:100%">
+{% for a in o %}
+<tr>
+	<td>
+<a href="item/{{ a.pk }}"><img src="/media/{{ a.foto }}"  style="height:250px;max-width:250px;width: expression(this.width > 250 ? 250: true);"></a></td><td>
+{{ a.nome }} </td><td>{% if a.prezzo_attuale == 0 %} {{ a.prezzo_partenza }} {% else %} {{ a.prezzo_attuale }} {% endif %}  </td><td> {{ a.data_termine }} </td></tr>
+{% endfor %}
+</table>
+<br>
+{% endblock %}

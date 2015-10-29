@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    {% block head %}{% endblock %}
+  </head>
+<body>
+
+Hi {{ user }} <br>
+<a href="/sell_object">Vendi oggetto</a>    
+{% if tipo == 1 %}
+<a href="/offerte">Le tue offerte</a>
+  {% else %} 
+ <a href="/account">I tuoi oggetti</a>
+ {% endif %}
+ <a href="/message">Messaggi</a>
+   <a href="/logout">Logout</a>
+<br>{% block body %}{% endblock %}
+  </body>
+</html>

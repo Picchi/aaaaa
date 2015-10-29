@@ -32,7 +32,8 @@ class AddObject(forms.Form):
 	des=forms.CharField(label='Descrizione',required=True)
 
 def index(req):
-	o=Oggetto.objects.all().order_by('?')[:5]
+	#o=Oggetto.objects.all().order_by('?')[:5]
+	o=Oggetto.objects.filter(stato=1).order_by('?')[:5]
 	#o=Oggetto.objects.filter(data_termine__gt=datetime.datetime.now()).order_by('nome')[:5]
 	return render(req,'aste_core/index.html',{'o':o})
 
@@ -163,7 +164,7 @@ def search(req):
 		s=''
 	o=Oggetto.objects.none()
 	for i in req.GET['s'].split(' '):
-		o = o | Oggetto.objects.filter(data_termine__gt=datetime.datetime.now(),nome__contains=i)
+		o = o | Oggetto.objects.filter(stato=1,nome__contains=i)
 	return render(req,'aste_core/index.html',{'o':o})
 
 @login_required
